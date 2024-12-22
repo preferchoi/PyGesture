@@ -16,8 +16,11 @@ def __main__():
 
     while cap.isOpened():
         ret, frame = cap.read()
+        frame_h, frame_w, _ = frame.shape
+
         if not ret:
             break
+
         frame = cv2.flip(frame, 1)
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = hands.process(rgb_frame)
@@ -26,15 +29,17 @@ def __main__():
                 gum_gi = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
                 jung_ji = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
 
-                index_x, index_y = int(gum_gi.x * screen_w), int(gum_gi.y * screen_h)
-                middle_x, middle_y = int(jung_ji.x * screen_w), int(jung_ji.y * screen_h)
+                gum_gi_x, gum_gi_y = int(gum_gi.x * screen_w), int(gum_gi.y * screen_h)
+                jung_ji_x, jung_ji_y = int(jung_ji.x * screen_w), int(jung_ji.y * screen_h)
 
-                distance = ((index_x - middle_x) ** 2 + (index_y - middle_y) ** 2) ** 0.5
+                frame_gum_gi_x, frame_gum_gi_y = int(gum_gi.x * frame_w), int(gum_gi.y * frame_h)
+
+                distance = ((gum_gi_x - jung_ji_x) ** 2 + (gum_gi_y - jung_ji_y) ** 2) ** 0.5
 
                 if distance < 50:
-                    pyautogui.moveTo(index_x, index_y)
+                    cv2.circle(frame, (frame_gum_gi_x, frame_gum_gi_y), 100, (0, 255, 0), -1)
+                    pyautogui.moveTo(gum_gi_x, gum_gi_y)
 
-                    cv2.circle(frame, (index_x, index_y), 10, (0, 255, 0), -1)
                 mp_draw.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
         cv2.imshow('camera', frame)
