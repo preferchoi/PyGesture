@@ -69,14 +69,6 @@ def __main__():
 
                 # 오른손(마우스)
                 if handedness.classification[0].label == 'Right':
-                    # 검지
-                    index_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
-                    # 엄지
-                    thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-                    # 중지
-                    middle_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
-                    # 약지
-                    ring_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
 
                     # 마우스 이동을 위한 검지 좌표 정규화 값
                     index_finger_tip_x = int(index_finger_tip.x * screen_w)
