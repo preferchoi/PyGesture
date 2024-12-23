@@ -100,6 +100,33 @@ def __main__():
 
                 # 왼손(키보드)
                 elif handedness.classification[0].label == 'Left':
+                    # 검지
+                    index_finger_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP]
+                    # 중지
+                    middle_finger_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP]
+                    # 약지
+                    ring_finger_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_MCP]
+                    # 소지
+                    pinky_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP]
+
+                    index_finger_mcp_y = int(index_finger_mcp.y * screen_h)
+                    middle_finger_mcp_y = int(middle_finger_mcp.y * screen_h)
+                    ring_finger_mcp_y = int(ring_finger_mcp.y * screen_h)
+                    pinky_mcp_y = int(pinky_mcp.y * screen_h)
+
+                    index_finger_tip_y = int(index_finger_tip.y * screen_h)
+                    middle_finger_tip_y = int(middle_finger_tip.y * screen_h)
+                    ring_finger_tip_y = int(ring_finger_tip.y * screen_h)
+                    pinky_tip_y = int(pinky_tip.y * screen_h)
+
+                    if index_finger_mcp_y < index_finger_tip_y:
+                        pyautogui.press('q')
+                    if middle_finger_mcp_y < middle_finger_tip_y:
+                        pyautogui.press('w')
+                    if ring_finger_mcp_y < ring_finger_tip_y:
+                        pyautogui.press('e')
+                    if pinky_mcp_y < pinky_tip_y:
+                        pyautogui.press('r')
 
                     '''
                     type: 사용하는 손가락 수에 따른 타입
