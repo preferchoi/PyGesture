@@ -35,8 +35,6 @@ class ClickState(Enum):
 
 
 def __main__():
-    print('pjt start')
-
     mp_hands = mediapipe.solutions.hands
     hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7)
     mp_draw = mediapipe.solutions.drawing_utils
@@ -59,37 +57,24 @@ def __main__():
         if results.multi_hand_landmarks:
             for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
                 gum_gi = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
-                jung_ji = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
-
                 gum_gi_x, gum_gi_y = int(gum_gi.x * screen_w), int(gum_gi.y * screen_h)
-                jung_ji_x, jung_ji_y = int(jung_ji.x * screen_w), int(jung_ji.y * screen_h)
 
-                frame_gum_gi_x, frame_gum_gi_y = int(gum_gi.x * frame_w), int(gum_gi.y * frame_h)
-
-                distance = ((gum_gi_x - jung_ji_x) ** 2 + (gum_gi_y - jung_ji_y) ** 2) ** 0.5
-
-                if distance < 50:
-                    cv2.circle(frame, (frame_gum_gi_x, frame_gum_gi_y), 100, (0, 255, 0), -1)
+                if handedness.classification[0].label == 'Right':
                     pyautogui.moveTo(gum_gi_x, gum_gi_y)
 
-                if read_click:
-                    um_gi = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-                    yak_ji = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
+                    if read_click:
+                        thumb_tib = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+                        thumb_ip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_IP]
 
-                    um_gi_x, um_gi_y = int(um_gi.x * screen_w), int(um_gi.y * screen_h)
-                    yak_ji_x, yak_ji_y = int(yak_ji.x * screen_w), int(yak_ji.y * screen_h)
+                        thumb_tib_X = int(thumb_tib.x * screen_w)
+                        thumb_ip_X = int(thumb_ip.x * screen_w)
 
-                    frame_um_gi_x, frame_um_gi_y = int(um_gi.x * frame_w), int(um_gi.y * frame_h)
+                        if thumb_ip_X < thumb_tib_X:
+                            cv2.circle(frame, (0, 0), 100, (0, 255, 0), -1)
+                            pyautogui.rightClick()
 
-                    click_distance = ((um_gi_x - yak_ji_x) ** 2 + (um_gi_y - yak_ji_y) ** 2) ** 0.5
-                    if click_distance < 50:
-                        if read_click == ClickState.READY:
-                            cv2.circle(frame, (frame_um_gi_x, frame_um_gi_y), 100, (0, 255, 0), -1)
-                            pyautogui.click()
-                            read_click = ClickState.BUSY
-
-                elif read_click == ClickState.BUSY:
-                    read_click = ClickState.READY
+                elif handedness.classification[0].label == 'Left':
+                    pass
 
                 mp_draw.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
@@ -99,5 +84,5 @@ def __main__():
 
 
 if __name__ == '__main__':
-    # __main__()
-    app.run()
+    __main__()
+    # app.run()
