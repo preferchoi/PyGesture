@@ -143,13 +143,14 @@ def __main__():
                     output: 'press' | 'click' | 'hold'
                     detail: 'right' | 'left' | keyboard_key
                     '''
-                    pass
+
                 mp_draw.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
         cv2.imshow('camera', frame)
-        if cv2.waitKey(1) != -1:
+        if cv2.waitKey(1) & 0xFF == 27:
             break
 
+    cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     __main__()
