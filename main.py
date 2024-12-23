@@ -1,8 +1,31 @@
+from flask import Flask, jsonify, request
+
 import cv2
 import mediapipe
 import pyautogui
 
 from enum import Enum
+from mediapipe.python.solutions.hands import HandLandmark
+
+app = Flask(__name__)
+
+
+@app.route('/landmarks', methods=['GET'])
+def get_landmarks():
+    hand_landmark_dict = {key: value.value for key, value in HandLandmark.__members__.items()}
+    return jsonify(hand_landmark_dict)
+
+
+@app.route('/event', methods=['GET'])
+def get_events():
+    hand_landmark_dict = {key: value.value for key, value in HandLandmark.__members__.items()}
+    return jsonify(hand_landmark_dict)
+
+
+class Event:
+    point_1: str
+    point_2: str
+    event: str
 
 
 class ClickState(Enum):
@@ -76,4 +99,5 @@ def __main__():
 
 
 if __name__ == '__main__':
-    __main__()
+    # __main__()
+    app.run()
