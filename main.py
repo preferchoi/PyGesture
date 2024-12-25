@@ -41,7 +41,8 @@ def __main__():
 
     screen_w, screen_h = pyautogui.size()
 
-    read_click: ClickState = ClickState.READY
+    press_ = {'q': True, 'w': True, 'e': True, 'r': True}
+    click_ = {'left': True, 'right': True}
 
     cap = cv2.VideoCapture(0)
 
@@ -84,10 +85,13 @@ def __main__():
                     middle_finger_tip_y = int(middle_finger_tip.y * screen_h)
 
                     distance = ((thumb_tip_x - middle_finger_tip_x) ** 2 + (
-                                thumb_tip_y - middle_finger_tip_y) ** 2) ** 0.5
-
-                    if distance < 50:
+                            thumb_tip_y - middle_finger_tip_y) ** 2) ** 0.5
+                    trigger_ = distance < 50
+                    if trigger_ and click_['left']:
                         pyautogui.leftClick()
+                        click_['left'] = False
+                    elif not trigger_ and not click_['left']:
+                        click_['left'] = True
 
                     # 우클릭 이벤트를 위한 약지 좌표 값
                     ring_finger_tip_x = int(ring_finger_tip.x * screen_w)
@@ -95,8 +99,12 @@ def __main__():
 
                     distance = ((thumb_tip_x - ring_finger_tip_x) ** 2 + (thumb_tip_y - ring_finger_tip_y) ** 2) ** 0.5
 
-                    if distance < 50:
+                    trigger_ = distance < 50
+                    if trigger_ and click_['right']:
                         pyautogui.rightClick()
+                        click_['right'] = False
+                    elif not trigger_ and not click_['right']:
+                        click_['right'] = True
 
                 # 왼손(키보드)
                 elif handedness.classification[0].label == 'Left':
@@ -119,14 +127,33 @@ def __main__():
                     ring_finger_tip_y = int(ring_finger_tip.y * screen_h)
                     pinky_tip_y = int(pinky_tip.y * screen_h)
 
-                    if index_finger_mcp_y < index_finger_tip_y:
+                    trigger_ = index_finger_mcp_y < index_finger_tip_y
+                    if trigger_ and press_['q']:
                         pyautogui.press('q')
-                    if middle_finger_mcp_y < middle_finger_tip_y:
+                        press_['q'] = False
+                    elif not trigger_ and not press_['q']:
+                        press_['q'] = True
+
+                    trigger_ = middle_finger_mcp_y < middle_finger_tip_y
+                    if trigger_ and press_['w']:
                         pyautogui.press('w')
-                    if ring_finger_mcp_y < ring_finger_tip_y:
+                        press_['w'] = False
+                    elif not trigger_ and not press_['w']:
+                        press_['w'] = True
+
+                    trigger_ = ring_finger_mcp_y < ring_finger_tip_y
+                    if trigger_ and press_['e']:
                         pyautogui.press('e')
-                    if pinky_mcp_y < pinky_tip_y:
+                        press_['e'] = False
+                    elif not trigger_ and not press_['e']:
+                        press_['e'] = True
+
+                    trigger_ = pinky_mcp_y < pinky_tip_y
+                    if trigger_ and press_['r']:
                         pyautogui.press('r')
+                        press_['r'] = False
+                    elif not trigger_ and not press_['r']:
+                        press_['r'] = True
 
                     '''
                     type: 사용하는 손가락 수에 따른 타입
