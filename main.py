@@ -57,15 +57,32 @@ def __main__():
         results = hands.process(rgb_frame)
         if results.multi_hand_landmarks:
             for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
-                # 엄지
+
+                wrist = hand_landmarks.landmark[mp_hands.HandLandmark.WRIST]
+
+                thumb_cmc = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_CMC]
+                thumb_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_MCP]
+                thumb_ip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_IP]
                 thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-                # 검지
+
+                index_finger_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP]
+                index_finger_pip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_PIP]
+                index_finger_dip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_DIP]
                 index_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
-                # 중지
+
+                middle_finger_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP]
+                middle_finger_pip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_PIP]
+                middle_finger_dip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_DIP]
                 middle_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
-                # 약지
+
+                ring_finger_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_MCP]
+                ring_finger_pip = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_PIP]
+                ring_finger_dip = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_DIP]
                 ring_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
-                # 소지
+
+                pinky_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP]
+                pinky_pip = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_PIP]
+                pinky_dip = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_DIP]
                 pinky_tip = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP]
 
                 # 오른손(마우스)
@@ -108,15 +125,6 @@ def __main__():
 
                 # 왼손(키보드)
                 elif handedness.classification[0].label == 'Left':
-                    # 검지
-                    index_finger_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP]
-                    # 중지
-                    middle_finger_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP]
-                    # 약지
-                    ring_finger_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_MCP]
-                    # 소지
-                    pinky_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP]
-
                     index_finger_mcp_y = int(index_finger_mcp.y * screen_h)
                     middle_finger_mcp_y = int(middle_finger_mcp.y * screen_h)
                     ring_finger_mcp_y = int(ring_finger_mcp.y * screen_h)
