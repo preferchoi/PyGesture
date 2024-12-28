@@ -4,7 +4,6 @@ import cv2
 import mediapipe
 import pyautogui
 
-from enum import Enum
 from mediapipe.python.solutions.hands import HandLandmark
 
 app = Flask(__name__)
@@ -26,12 +25,6 @@ class Event:
     point_1: str
     point_2: str
     event: str
-
-
-class ClickState(Enum):
-    DISABLED = 0  # 클릭 비활성
-    READY = 1  # 클릭 준비 완료
-    BUSY = 2  # 클릭 작동 중
 
 
 def __main__():
