@@ -31,6 +31,17 @@ class Event:
         self.key = key
 
 
+def check_event(event: Event) -> None:
+    global press_
+    trigger_ = event.point_1 < event.point_2
+    if trigger_ and press_[event.key]:
+        pyautogui.press(event.key)
+        press_[event.key] = False
+    elif not trigger_ and not press_[event.key]:
+        press_[event.key] = True
+    return None
+
+
 def __main__():
     global press_, click_
     mp_hands = mediapipe.solutions.hands
@@ -130,33 +141,10 @@ def __main__():
                     ring_finger_tip_y = int(ring_finger_tip.y * screen_h)
                     pinky_tip_y = int(pinky_tip.y * screen_h)
 
-                    trigger_ = index_finger_mcp_y < index_finger_tip_y
-                    if trigger_ and press_['q']:
-                        pyautogui.press('q')
-                        press_['q'] = False
-                    elif not trigger_ and not press_['q']:
-                        press_['q'] = True
-
-                    trigger_ = middle_finger_mcp_y < middle_finger_tip_y
-                    if trigger_ and press_['w']:
-                        pyautogui.press('w')
-                        press_['w'] = False
-                    elif not trigger_ and not press_['w']:
-                        press_['w'] = True
-
-                    trigger_ = ring_finger_mcp_y < ring_finger_tip_y
-                    if trigger_ and press_['e']:
-                        pyautogui.press('e')
-                        press_['e'] = False
-                    elif not trigger_ and not press_['e']:
-                        press_['e'] = True
-
-                    trigger_ = pinky_mcp_y < pinky_tip_y
-                    if trigger_ and press_['r']:
-                        pyautogui.press('r')
-                        press_['r'] = False
-                    elif not trigger_ and not press_['r']:
-                        press_['r'] = True
+                    check_event(Event(point_1=index_finger_mcp_y, point_2=index_finger_tip_y, key='q'))
+                    check_event(Event(point_1=middle_finger_mcp_y, point_2=middle_finger_tip_y, key='w'))
+                    check_event(Event(point_1=ring_finger_mcp_y, point_2=ring_finger_tip_y, key='e'))
+                    check_event(Event(point_1=pinky_mcp_y, point_2=pinky_tip_y, key='r'))
 
                     '''
                     type: 사용하는 손가락 수에 따른 타입
@@ -181,6 +169,7 @@ def __main__():
             break
 
     cv2.destroyAllWindows()
+
 
 if __name__ == '__main__':
     __main__()
