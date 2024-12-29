@@ -8,6 +8,9 @@ from mediapipe.python.solutions.hands import HandLandmark
 
 app = Flask(__name__)
 
+press_ = {'q': True, 'w': True, 'e': True, 'r': True}
+click_ = {'left': True, 'right': True}
+
 
 @app.route('/landmarks', methods=['GET'])
 def get_landmarks():
@@ -22,20 +25,19 @@ def get_events():
 
 
 class Event:
-    point_1: str
-    point_2: str
-    event: str
+    def __init__(self, point_1: float, point_2: float, key: str):
+        self.point_1 = point_1
+        self.point_2 = point_2
+        self.key = key
 
 
 def __main__():
+    global press_, click_
     mp_hands = mediapipe.solutions.hands
     hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7)
     mp_draw = mediapipe.solutions.drawing_utils
 
     screen_w, screen_h = pyautogui.size()
-
-    press_ = {'q': True, 'w': True, 'e': True, 'r': True}
-    click_ = {'left': True, 'right': True}
 
     cap = cv2.VideoCapture(0)
 
