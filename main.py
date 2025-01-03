@@ -1,27 +1,19 @@
-from flask import Flask, jsonify
+import sqlalchemy
+from fastapi import FastAPI
 
 import cv2
 import mediapipe
 import pyautogui
 
-from mediapipe.python.solutions.hands import HandLandmark
-
-app = Flask(__name__)
+app = FastAPI()
 
 press_ = {'q': True, 'w': True, 'e': True, 'r': True}
 click_ = {'left': True, 'right': True}
 
 
-@app.route('/landmarks', methods=['GET'])
-def get_landmarks():
-    hand_landmark_dict = {key: value.value for key, value in HandLandmark.__members__.items()}
-    return jsonify(hand_landmark_dict)
-
-
-@app.route('/event', methods=['GET'])
-def get_events():
-    hand_landmark_dict = {key: value.value for key, value in HandLandmark.__members__.items()}
-    return jsonify(hand_landmark_dict)
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
 
 
 class Event:
@@ -173,4 +165,3 @@ def __main__():
 
 if __name__ == '__main__':
     __main__()
-    # app.run()
