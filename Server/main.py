@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from Server.db import init_db
+from fastapi.responses import Response, JSONResponse
+from db import init_db
 
 app = FastAPI()
 
@@ -12,3 +13,9 @@ async def startup():
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+
+@app.get("/gesture")
+def get_gesture():
+    
+    return JSONResponse(content="", status_code=200)
